@@ -1,16 +1,16 @@
 package com.example.weather.data.api
 
-import com.example.weather.data.model.CurrentWeatherInfo
+import com.example.weather.data.api.responce.ConnectivityInterceptor
+import com.example.weather.data.api.responce.ConnectivityInterceptorImpl
+import com.example.weather.data.api.responce.CurrentWeatherInfo
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.nio.file.attribute.AclEntry.newBuilder
 
 //http://api.weatherapi.com/v1/current.json?key=a8a08f2cc90a472eb6990608232602&q=Kiev&aqi=no
 
@@ -25,7 +25,9 @@ interface ApiWeatherServise {
     ):Deferred<CurrentWeatherInfo>
 
     companion object{
-        operator fun invoke(): ApiWeatherServise{
+        operator fun invoke(
+            connectivityInterceptor: ConnectivityInterceptor
+        ): ApiWeatherServise{
             val requestInterceptor = Interceptor{ chain ->
                 val url = chain.request()
                     .url()
@@ -42,6 +44,7 @@ interface ApiWeatherServise {
             }
 
             val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(connectivityInterceptor)
                 .addInterceptor(requestInterceptor)
                 .build()
 

@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.weather.data.db.dao.CurrentWeatherDao
-import com.example.weather.data.model.CurrentWeatherInfo
+import com.example.weather.data.api.responce.CurrentWeatherInfo
 
 @Database(
     entities = [CurrentWeatherInfo::class],
